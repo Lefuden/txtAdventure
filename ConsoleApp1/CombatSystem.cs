@@ -48,9 +48,9 @@ namespace BattleSystem
         {
             HP = 30;
             Def = 3;
-            Atk = 8;
+            Atk = 7;
         }
-        public int HP { get; set; } //30, 3, 8
+        public int HP { get; set; } //hp30, def3, atk7
         public int Def { get; set; }
         public int Atk { get; set; }
     }
@@ -78,30 +78,31 @@ namespace BattleSystem
                 if (PlayerAccuracy == 1)
                 {
                     Console.WriteLine($"You somehow manage to throw yourself off balance and smash your face into the wall!\n" +
-                        $"you take {DamageToPlayer = player.Atk + 2} damage.");
+                                      $"you take {DamageToPlayer = player.Atk + 2} damage.");
                     player.HP = player.HP - DamageToPlayer;
                 }
-                else if (PlayerAccuracy > 1 && PlayerAccuracy <= 25)
+                else if (PlayerAccuracy > 1 && PlayerAccuracy <= 20)
                 {
                     Console.WriteLine("You violently cut the air!");
                 }
-                else if (PlayerAccuracy > 25 && PlayerAccuracy <= 50)
+                else if (PlayerAccuracy > 20 && PlayerAccuracy <= 40)
                 {
                     Console.WriteLine($"The {enemy.enemyType.ToString()} raises its guard! You deal {DamageToEnemy = player.Atk - enemy.Def - 2} damage.");
                     enemy.HP = enemy.HP - DamageToEnemy;
                 }
-                else if (PlayerAccuracy > 50 && PlayerAccuracy <= 65)
+                else if (PlayerAccuracy > 40 && PlayerAccuracy <= 55)
                 {
-                    Console.WriteLine("The enemy swiftly steps to the side and dodges the attack!");
+                    Console.WriteLine($"The {enemy.enemyType.ToString()} swiftly steps to the side and dodges the attack!");
                 }
-                else if (PlayerAccuracy > 65 && PlayerAccuracy <= 99)
+                else if (PlayerAccuracy > 55 && PlayerAccuracy <= 99)
                 {
-                    Console.WriteLine($"You deal {DamageToEnemy = player.Atk - enemy.Def} damage.");
+                    Console.WriteLine($"You deal {DamageToEnemy = player.Atk - enemy.Def} damage!");
                     enemy.HP = enemy.HP - DamageToEnemy;
                 }
                 else
                 {
-                    Console.WriteLine($"Your aim is true and you hit a weakpoint on the enemy! You deal {DamageToEnemy = player.Atk * 2 + 2 - enemy.Def} critical damage!");
+                    Console.WriteLine($"Your aim is true and you hit a weakpoint on the {enemy.enemyType.ToString()}! " +
+                                      $"You deal {DamageToEnemy = player.Atk * 2 + 2 - enemy.Def} critical damage!");
                     enemy.HP = enemy.HP - DamageToEnemy;
                 }
         }
@@ -113,32 +114,32 @@ namespace BattleSystem
             int DamageToPlayer;
                 if (EnemyAccuracy == 1)
                 {
-                    Console.WriteLine($"The skeleton overshoots his swing, throws itself off balance and smashes his skull into the wall!\n" +
-                        $"The Skeleton takes {DamageToEnemy = enemy.Atk + 2} damage.");
+                    Console.WriteLine($"The {enemy.enemyType.ToString()} overshoots its swing, throws itself off balance and smashes its skull into the wall!\n" +
+                                      $"The {enemy.enemyType.ToString()} takes {DamageToEnemy = enemy.Atk + 2} damage.");
                     enemy.HP = enemy.HP - DamageToEnemy;
                 }
-                else if (EnemyAccuracy > 1 && EnemyAccuracy <= 25)
+                else if (EnemyAccuracy > 1 && EnemyAccuracy <= 30)
                 {
                     Console.WriteLine($"The {enemy.enemyType.ToString()} misses!");
                 }
-                else if (EnemyAccuracy > 25 && EnemyAccuracy <= 50)
+                else if (EnemyAccuracy > 30 && EnemyAccuracy <= 60)
                 {
                     Console.WriteLine($"You raise your guard and deftly block the attack with your shield! You take {DamageToPlayer = enemy.Atk - player.Def - 2} damage.");
                     player.HP = player.HP - DamageToPlayer;
                 }
-                else if (EnemyAccuracy > 50 && EnemyAccuracy <= 65)
+                else if (EnemyAccuracy > 60 && EnemyAccuracy <= 70)
                 {
                     Console.WriteLine("You quickly react to the incoming swing and dodge the attack!");
                 }
-                else if (EnemyAccuracy > 65 && EnemyAccuracy <= 99)
+                else if (EnemyAccuracy > 70 && EnemyAccuracy <= 99)
                 {
-                    Console.WriteLine($"The skeleton deals {DamageToPlayer = enemy.Atk - player.Def} damage.");
+                    Console.WriteLine($"The {enemy.enemyType.ToString()} deals {DamageToPlayer = enemy.Atk - player.Def} damage.");
                     player.HP = player.HP - DamageToPlayer;
                 }
                 else
                 {
                     Console.WriteLine($"The fearsome mass of bones suddenly move with incredible speed and steps past your guard.\n" +
-                        $"The blow hits a weak point! You take {DamageToPlayer = enemy.Atk * 2 + 2 - player.Def} critical damage!");
+                                      $"The blow hits a weak point! You take {DamageToPlayer = enemy.Atk * 2 + 2 - player.Def} critical damage!");
                     player.HP = player.HP - DamageToPlayer;
                 }
         }
