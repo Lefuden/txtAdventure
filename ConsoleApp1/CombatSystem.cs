@@ -58,43 +58,66 @@ namespace BattleSystem
     {
         public static void Combat(Player player, Enemy enemy)
         {
+            string fightMove;
             while (player.HP > 0 && enemy.HP > 0)
             {
-                PlayerAccuracy(player, enemy);
-                Console.WriteLine("Press Enter to continue.");
-                Console.ReadLine();
-                Program.controls();
+                Console.WriteLine($"\n\nCommands:> FIGHT[F] BACKPACK[B]\nPlayer:> {player.name}\nPlayer HP:> {player.HP} \nEnemy:> {enemy.enemyType.ToString()}\nEnemy HP:> {enemy.HP}");
+                Console.Write("Input:> ");
+                fightMove = Console.ReadLine().ToUpper();
+                while (!(fightMove == "FIGHT" || fightMove == "F" || fightMove == "BACKPACK" || fightMove == "B"))
+                {
+                    Console.Clear();
+                    Console.WriteLine($"\n\nCommands:> FIGHT[F] BACKPACK[B]\nPlayer:> {player.name}\nPlayer HP:> {player.HP} \nEnemy:> {enemy.enemyType.ToString()}\nEnemy HP:> {enemy.HP}");
+                    Console.Write("Input:> ");
+                    fightMove = Console.ReadLine().ToUpper();
+                }
+                if (fightMove == "FIGHT" || fightMove == "F")
+                {
+                    PlayerAccuracy(player, enemy);
+                }
+                else if (fightMove == "BACKPACK" || fightMove == "B")
+                {
+                    
+                }
                 if (enemy.HP <= 0) break;
                 EnemyAccuracy(player, enemy);
+                if (player.HP <=0)
+                {
+                    Console.Clear();
+                    Console.WriteLine("GAME OVER!");
+                    Console.WriteLine("Press Enter to exit.");
+                    Console.ReadLine();
+                    Environment.Exit(-1);
+                }
             }
         }
         static void PlayerAccuracy(Player player, Enemy enemy)
         {
             Random rand = new Random();
-            int PlayerAccuracy = Convert.ToInt32(rand.Next(1, 100));
+            int playerAccuracy = Convert.ToInt32(rand.Next(1, 100));
             int DamageToEnemy;
             int DamageToPlayer;
 
-                if (PlayerAccuracy == 1)
+                if (playerAccuracy == 1)
                 {
                     Console.WriteLine($"You somehow manage to throw yourself off balance and smash your face into the wall!\n" +
                                       $"you take {DamageToPlayer = player.Atk + 2} damage.");
                     player.HP = player.HP - DamageToPlayer;
                 }
-                else if (PlayerAccuracy > 1 && PlayerAccuracy <= 20)
+                else if (playerAccuracy > 1 && playerAccuracy <= 20)
                 {
                     Console.WriteLine("You violently cut the air!");
                 }
-                else if (PlayerAccuracy > 20 && PlayerAccuracy <= 40)
+                else if (playerAccuracy > 20 && playerAccuracy <= 40)
                 {
                     Console.WriteLine($"The {enemy.enemyType.ToString()} raises its guard! You deal {DamageToEnemy = player.Atk - enemy.Def - 2} damage.");
                     enemy.HP = enemy.HP - DamageToEnemy;
                 }
-                else if (PlayerAccuracy > 40 && PlayerAccuracy <= 55)
+                else if (playerAccuracy > 40 && playerAccuracy <= 55)
                 {
                     Console.WriteLine($"The {enemy.enemyType.ToString()} swiftly steps to the side and dodges the attack!");
                 }
-                else if (PlayerAccuracy > 55 && PlayerAccuracy <= 99)
+                else if (playerAccuracy > 55 && playerAccuracy <= 99)
                 {
                     Console.WriteLine($"You deal {DamageToEnemy = player.Atk - enemy.Def} damage!");
                     enemy.HP = enemy.HP - DamageToEnemy;
@@ -109,29 +132,29 @@ namespace BattleSystem
         static void EnemyAccuracy(Player player, Enemy enemy)
         {
             Random rand = new Random();
-            int EnemyAccuracy = Convert.ToInt32(rand.Next(1, 100));
+            int enemyAccuracy = Convert.ToInt32(rand.Next(1, 100));
             int DamageToEnemy;
             int DamageToPlayer;
-                if (EnemyAccuracy == 1)
+                if (enemyAccuracy == 1)
                 {
                     Console.WriteLine($"The {enemy.enemyType.ToString()} overshoots its swing, throws itself off balance and smashes its skull into the wall!\n" +
                                       $"The {enemy.enemyType.ToString()} takes {DamageToEnemy = enemy.Atk + 2} damage.");
                     enemy.HP = enemy.HP - DamageToEnemy;
                 }
-                else if (EnemyAccuracy > 1 && EnemyAccuracy <= 30)
+                else if (enemyAccuracy > 1 && enemyAccuracy <= 30)
                 {
                     Console.WriteLine($"The {enemy.enemyType.ToString()} misses!");
                 }
-                else if (EnemyAccuracy > 30 && EnemyAccuracy <= 60)
+                else if (enemyAccuracy > 30 && enemyAccuracy <= 60)
                 {
                     Console.WriteLine($"You raise your guard and deftly block the attack with your shield! You take {DamageToPlayer = enemy.Atk - player.Def - 2} damage.");
                     player.HP = player.HP - DamageToPlayer;
                 }
-                else if (EnemyAccuracy > 60 && EnemyAccuracy <= 70)
+                else if (enemyAccuracy > 60 && enemyAccuracy <= 70)
                 {
                     Console.WriteLine("You quickly react to the incoming swing and dodge the attack!");
                 }
-                else if (EnemyAccuracy > 70 && EnemyAccuracy <= 99)
+                else if (enemyAccuracy > 70 && enemyAccuracy <= 99)
                 {
                     Console.WriteLine($"The {enemy.enemyType.ToString()} deals {DamageToPlayer = enemy.Atk - player.Def} damage.");
                     player.HP = player.HP - DamageToPlayer;

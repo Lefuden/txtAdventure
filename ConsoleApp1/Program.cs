@@ -7,15 +7,17 @@ namespace textAdventure
     {
         public static string move;
         public static int guardQuarterKey = 1;
-        public static int guardQuarterKeyUsed = 0;
+        public static int guardQuarterKeyUnlocked = 0;
         public static int hallOfTorchesKey = 1;
-        public static int hallOfTorchesKeyUsed = 0;
+        public static int hallOfTorchesKeyUnlocked = 0;
         public static int treasuryKey = 1;
-        public static int treasuryKeyUsed = 0;
+        public static int treasuryKeyUnlocked = 0;
         public static Player player;
-        public static int healthPotion = 2;
+        public static int SWBhealthPotion = 1;
+        public static int EWBhealthPotion = 1;
         public static int Mace = 1;
         public static int OakShield = 1;
+        public static bool southwingskeleton =  true;
 
         public static void controls()
         {
@@ -23,6 +25,10 @@ namespace textAdventure
             Console.Write("Input:> ");
             move = Console.ReadLine();
             move = move.ToUpper();
+            if (move == "BACKPACK" || move == "B")
+            {
+                player.backpack.ShowBackpack();
+            }
         }
         //public static void fightControls(Enemy enemy)
         //{
@@ -64,15 +70,6 @@ namespace textAdventure
                         "Weird -you think to yourself- I could hear the screeching seagulls up until I set foot on this island.");
                     Console.WriteLine("Press Enter to continue.");
                     Console.ReadLine();
-                }
-
-                else if (move == "BACKPACK" || move == "B")
-                {
-                    Console.Clear();
-                    Console.WriteLine("You open your backpack.");
-                    player.backpack.ShowBackpack();
-                    Console.WriteLine("Would you like to use an item?");
-                    //Selection(Console.ReadLine());
                 }
                 else if (move == "NORTH" || move == "N")
                 {
@@ -140,9 +137,9 @@ namespace textAdventure
                         Console.WriteLine("Press Enter to continue.");
                         Console.ReadLine();
                         SouthWingStairwell();
-                        guardQuarterKeyUsed = 1;
+                        guardQuarterKeyUnlocked = 1;
                     }
-                    else if (guardQuarterKeyUsed == 1)
+                    else if (guardQuarterKeyUnlocked == 1)
                     {
                         Console.Clear();
                         Console.WriteLine("You open the door.");
@@ -230,20 +227,21 @@ namespace textAdventure
         }
         static void SouthWingStairwell() //ADD IN SKELETON COMBAT!
         {
-            int Skeleton = 1;
+
             while (true)
             {
-                if (Skeleton == 1)
+                if (southwingskeleton)
                 {
                     Console.Clear();
                     Console.WriteLine("You find yourself in a short corridor, but before you have time to look around you notice a Skeleton in front of you.\n" +
                                       "The skull cap on its head is rusted. It has an axe and a wooden shield in its hands.\n" +
                                       "It turns around and looks at you through empty eye sockets.\n" +
                                       "Suddenly it starts moving towards you - Prepare for battle!");
-                    controls();
                     CombatSystem.Combat(player, new Enemy(EnemyType.Skeleton));
+                    southwingskeleton = false;
+                    controls();
                 }
-                else if (Skeleton == 0)
+                else if (!southwingskeleton)
                 {
                     Console.Clear();
                     Console.WriteLine("You stand in a short corridor. There are sconces on the walls, lighting up the area. " +
@@ -356,7 +354,7 @@ namespace textAdventure
                 }
                 else if (move == "SOUTH" || move == "S")
                 {
-                    if (healthPotion == 2)
+                    if (SWBhealthPotion == 1)
                     {
                         Console.Clear();
                         Console.WriteLine("As you put your hand on the cold stone railing, a part of it comes loose and falls into the water with a splash.\n" +
@@ -365,9 +363,9 @@ namespace textAdventure
                                           "You pocket it. (It's obviously a healing potion).");
                         Console.WriteLine("Press Enter to continue.");
                         Console.ReadLine();
-                        healthPotion--;
+                        SWBhealthPotion--;
                     }
-                    else if (healthPotion == 1)
+                    else if (SWBhealthPotion == 0)
                     {
                         Console.Clear();
                         Console.WriteLine("You take another careful look around, in case of other items scattered around.\n" +
@@ -685,9 +683,9 @@ namespace textAdventure
                         Console.WriteLine("Press Enter to continue.");
                         Console.ReadLine();
                         SouthWingStairwell();
-                        hallOfTorchesKeyUsed = 1;
+                        hallOfTorchesKeyUnlocked = 1;
                     }
-                    else if (hallOfTorchesKeyUsed == 1)
+                    else if (hallOfTorchesKeyUnlocked == 1)
                     {
                         Console.Clear();
                         Console.WriteLine("You open the door.");
@@ -890,16 +888,16 @@ namespace textAdventure
 
                 if (move == "WEST" || move == "W")
                 {
-                    if (treasuryKeyUsed == 0)
+                    if (treasuryKeyUnlocked == 0)
                     {
                         Console.Clear();
                         Console.WriteLine("You try the key you found in the Treasury.\nWith a gentle click the door is unlocked. You step inside.");
                         Console.WriteLine("Press Enter to continue.");
                         Console.ReadLine();
                         SouthWingStairwell();
-                        treasuryKeyUsed = 1;
+                        treasuryKeyUnlocked = 1;
                     }
-                    else if (treasuryKeyUsed == 1)
+                    else if (treasuryKeyUnlocked == 1)
                     {
                         Console.Clear();
                         Console.WriteLine("You open the door.");
