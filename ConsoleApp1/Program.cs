@@ -1,5 +1,6 @@
 ﻿using BattleSystem;
 using System;
+using backpack;
 
 namespace textAdventure
 {
@@ -18,10 +19,13 @@ namespace textAdventure
         public static int Mace = 1;
         public static int OakShield = 1;
         public static bool southwingskeleton =  true;
+        public static bool dampcellarskeleton = true;
+        public static bool northstairwellskeleton = true;
 
         public static void controls()
         {
-            Console.WriteLine($"\n\nCommands:> NORTH[N] WEST[W] SOUTH[S] EAST[E] FIGHT[F] BACKPACK[B]\nPlayer:> {player.name}\nCurrent HP:> {player.HP}");
+            Console.WriteLine($"\n\n{player.name} stats:\nHP: {player.HP} | ATK: {player.Atk} | DEF: {player.Def}" +
+                $"\nCommands:> NORTH[N] WEST[W] SOUTH[S] EAST[E] FIGHT[F] BACKPACK[B] [EXIT]");
             Console.Write("Input:> ");
             move = Console.ReadLine();
             move = move.ToUpper();
@@ -29,16 +33,30 @@ namespace textAdventure
             {
                 player.backpack.ShowBackpack();
             }
-        }
-        //public static void fightControls(Enemy enemy)
-        //{
-        //    Console.WriteLine($"\n\nCommands: FIGHT[F] BACKPACK[B] RETREAT[R]\nPlayer: {player.name}\nCurrent HP: {player.HP}\n" +
-        //                      $"Enemy HP: {enemy.HP}");
-        //    Console.Write("Input:> ");
-        //    move = Console.ReadLine();
-        //    move = move.ToUpper();
-        //}
+            if (move == "EXIT")
+            {
+                Console.Clear();
+                Console.WriteLine($"Are you sure you want to stop playing, {player.name}? There is no save function. Sorry.");
+                Console.Write("[Y]ES/[N]O:> ");
+                string decide = Console.ReadLine().ToUpper();
+                if (decide == "YES" || decide == "Y")
+                {
+                    Console.Clear();
+                    Console.WriteLine($"Thank you for playing, {player.name}!");
+                    Console.WriteLine("Press Enter to exit.");
+                    Console.ReadLine();
+                    Environment.Exit(-1);
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine($"{player.name} shakes off a moment of weakness and decides to return to the adventure at hand.");
+                    Console.WriteLine("Press Enter to continue.");
+                    Console.ReadLine();
+                }
+            }
 
+        }
         static void Main(string[] args)
         {
             Console.WriteLine(" _______   _______ ___ ______ _   _ _____ _   _ _____ _   _______ _____ ");
@@ -47,35 +65,54 @@ namespace textAdventure
             Console.WriteLine("  | |  /   \\  | ||  _  | | | | | | |  __|| . ` | | | | | | |    /|  __| ");
             Console.WriteLine("  | | / /^\\ \\ | || | | | |/ /\\ \\_/ / |___| |\\  | | | | |_| | |\\ \\| |___ ");
             Console.WriteLine("  \\_/ \\/   \\/ \\_/\\_| |_/___/  \\___/\\____/\\_| \\_/ \\_/  \\___/\\_| \\_\\____/ \n\n\n");
-            Console.Write("Enter your name:> ");
-            player = new Player(Console.ReadLine());
 
-            Console.WriteLine($"Welcome {player.name}, we are about to embark on an adventure together.");
-            Console.WriteLine("Press Enter to continue.");
-            Console.ReadLine();
-            Entrance();
+
+            
+            Console.WriteLine("1. New game");
+            Console.WriteLine("2. Exit\n\n");
+            Console.Write("Input:> ");
+            move = Console.ReadLine();
+                if (move == "1")
+                {
+                    Console.Write("Enter your name:> ");
+                    player = new Player(Console.ReadLine());
+                    Console.Clear();
+                    Console.WriteLine($"This all started in a tavern in a sleepy hamlet, quite a few hours from where you now stand.\n" +
+                                      $"After hearing stories of a 'haunted fort' on a remote island, and people never to be seen again,\n" +
+                                      $"you -drunkenly- proclaimed that YOU - {player.name}, mighty adventurer - shall free these poor souls\n" +
+                                      $"from whatever dangers hiding in this so called 'haunted fort'.\n\n" +
+                                      $"And so, your adventure begins.\n");
+                    Console.WriteLine("Press Enter to continue.");
+                    Console.ReadLine();
+                    Entrance();
+                }
+                else if (move == "2")
+                {
+                    Environment.Exit(-1);
+                }
+
         }
         static void Entrance()
         {
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine($"You stand in front of a large wooden gate.\nIt is surrounded by water on both sides.\nBehind you is the boat you arrived on.");
+                Console.WriteLine($"You stand in front of a large black gate.\nIt is surrounded by water on both sides.\nBehind you is the boat you arrived on.");
                 controls();
 
                 if (move == "WEST" || move == "W" || move == "EAST" || move == "E")
                 {
                     Console.Clear();
                     Console.WriteLine("You gaze out over the dark, foreboding water. You cannot hear any sounds of animals nor wind.\n" +
-                        "Weird -you think to yourself- I could hear the screeching seagulls up until I set foot on this island.");
+                                      "Weird -you think to yourself- I could hear the screeching seagulls up until I set foot on this island.");
                     Console.WriteLine("Press Enter to continue.");
                     Console.ReadLine();
                 }
                 else if (move == "NORTH" || move == "N")
                 {
                     Console.Clear();
-                    Console.WriteLine("You stand in front of a big, black gate, thinking back to the previous night in the Tavern.\nYou know why you are here.\n\n" +
-                                      "The stories about a cursed fort on a small island, and the people sailing there to investigate never to return.\n" +
+                    Console.WriteLine("As you step closer to the black gate, you see it has been reinforced with some form of metal,\nshaped in intricate designs." +
+                                      "\nThinking back to the previous night in the Tavern, you know why you are here.\n\n" +
                                       "The large sum of gold that will be yours once you've successfully investigated this godforsaken place.\n" +
                                       "Who knows what sort of riches you'll find inside?\n\n" +
                                       "You muster your courage and steel yourself for whatever is to come.\n\n" +
@@ -94,8 +131,8 @@ namespace textAdventure
                     {
                         Console.Clear();
                         Console.WriteLine("You thought being an adventurer was what you wanted to be, but a sudden realisation convinces you\n" +
-                                          "that your real calling is sheep herding. You step on to the boat and raise the sail.\n\nGAME OVER!");
-                        Console.WriteLine("Press Enter to exit.");
+                                          "that your real calling is goat herding. \nYou step on to the boat and raise the sail.\n\nGAME OVER!");
+                        Console.WriteLine("\nPress Enter to exit.");
                         Console.ReadLine();
                         Environment.Exit(-1);
                     }
@@ -111,7 +148,7 @@ namespace textAdventure
 
             }
         }
-        static void Hallway() //NEED G-KEY
+        static void Hallway()
         {
             while (true)
             {
@@ -173,7 +210,7 @@ namespace textAdventure
                 }
             }
         }
-        static void GuardsQuarter() //ITEM G-KEY
+        static void GuardsQuarter()
         {
             while (true)
             {
@@ -225,7 +262,7 @@ namespace textAdventure
                 }
             }
         }
-        static void SouthWingStairwell() //ADD IN SKELETON COMBAT!
+        static void SouthWingStairwell()
         {
 
             while (true)
@@ -244,7 +281,7 @@ namespace textAdventure
                 else if (!southwingskeleton)
                 {
                     Console.Clear();
-                    Console.WriteLine("You stand in a short corridor. There are sconces on the walls, lighting up the area. " +
+                    Console.WriteLine("You stand in a short corridor. There are sconces on the walls, lighting up the area.\n" +
                                       "A moldy red carpet leads between the two doors.\n" +
                                       "The remains of the Skeleton you fought lie in a pile on the floor. There is an eerie calm in this room now.");
                     controls();
@@ -327,7 +364,7 @@ namespace textAdventure
                 }
             }
         }
-        static void SouthWingBalcony() //ITEM HP POTION
+        static void SouthWingBalcony()
         {
             while (true)
             {
@@ -339,7 +376,8 @@ namespace textAdventure
                 if (move == "WEST" || move == "W")
                 {
                     Console.Clear();
-                    Console.WriteLine("You decide to lean over the railing a bit out of curiosity. I could probably survive this fall - you think to yourself.\n" +
+                    Console.WriteLine("You decide to lean over the railing a bit out of curiosity.\n" +
+                                      "I could probably survive this fall - you think to yourself.\n" +
                                       "You step away from the railing, shaking your head.");
                     Console.WriteLine("Press Enter to continue.");
                     Console.ReadLine();
@@ -364,6 +402,7 @@ namespace textAdventure
                         Console.WriteLine("Press Enter to continue.");
                         Console.ReadLine();
                         SWBhealthPotion--;
+                        player.backpack.backPack.Add(Item.HPpotion);
                     }
                     else if (SWBhealthPotion == 0)
                     {
@@ -383,7 +422,7 @@ namespace textAdventure
                 }
             }
         }
-        static void SouthBrokenBridge() //ITEM OLD MACE
+        static void SouthBrokenBridge()
         {
             while (true)
             {
@@ -398,7 +437,7 @@ namespace textAdventure
                     Console.WriteLine("You face the heavy wind, the pressure makes it hard to breathe.");
                     Console.WriteLine("Press Enter to continue.");
                     Console.ReadLine();
-                    SouthWingStairwell();
+                    SouthBrokenBridge();
                 }
                 else if (move == "NORTH" || move == "N")
                 {
@@ -415,7 +454,7 @@ namespace textAdventure
                     Console.ReadLine();
                     SouthWingLanding();
                 }
-                else if (move == "WEST" || move == "W")
+                else if (move == "EAST" || move == "E")
                 {
                     if (Mace == 1)
                     {
@@ -426,6 +465,7 @@ namespace textAdventure
                         Console.WriteLine("Press Enter to continue.");
                         Console.ReadLine();
                         Mace--;
+                        player.backpack.backPack.Add(Item.SteelMace);
                     }
                     else if (Mace == 0)
                     {
@@ -523,51 +563,62 @@ namespace textAdventure
                 }
             }
         }
-        static void DampCellar() //ADD IN SKELETON COMBAT!
+        static void DampCellar()
         {
             while (true)
             {
-                Console.Clear();
-                Console.WriteLine("As you take the last step of the stairwell and enter the damp cellar, you hear the rattling of bones.\n" +
-                                  "A menacing Skeleton soldier stands in your way. It holds a large spiked club in its hands.\n" +
-                                  "Before you get a chance to react it charges you. Prepare to fight!");
-                controls();
-
-                if (move == "WEST" || move == "W")
+                if (dampcellarskeleton)
                 {
                     Console.Clear();
-                    Console.WriteLine("You ascend the stairwell.");
-                    Console.WriteLine("Press Enter to continue.");
-                    Console.ReadLine();
-                    SouthWing3WayRoom();
+                    Console.WriteLine("As you take the last step of the stairwell and enter the damp cellar, you hear the rattling of bones.\n" +
+                                      "A menacing Skeleton soldier stands in your way. It holds a large spiked club in its hands.\n" +
+                                      "Before you get a chance to react it charges you. Prepare to fight!");
+                    CombatSystem.Combat(player, new Enemy(EnemyType.Skeleton));
+                    dampcellarskeleton = false;
+                    controls();
                 }
-                else if (move == "NORTH" || move == "N")
+                else if (!dampcellarskeleton)
                 {
                     Console.Clear();
-                    Console.WriteLine("You could swear you saw something moving in the corner of your eye.\n" +
-                                      "The skittering of what you can only assume is rats silently echoes across the damp cellar.");
-                    Console.WriteLine("Press Enter to continue.");
-                    Console.ReadLine();
-                }
-                else if (move == "SOUTH" || move == "S")
-                {
-                    Console.Clear();
-                    Console.WriteLine("Through the open door to the south, you see a very brightly lit room, you decide to investigate.");
-                    Console.WriteLine("Press Enter to continue.");
-                    Console.ReadLine();
-                    HallOfTorches();
-                }
-                else if (move == "EAST" || move == "E")
-                {
-                    Console.Clear();
-                    Console.WriteLine("Pools of kneehigh water fills the east part of the cellar.\n" +
-                                      "Your nose catches a whiff of what can only be described as putrid corpses.");
-                    Console.WriteLine("Press Enter to continue.");
-                    Console.ReadLine();
+                    Console.WriteLine("As you return to the damp cellar, you feel like leaving as soon as possible. The smell is horrendous.\n" +
+                                      "You quickly dart your eyes around the room, you see nothing that stands out.");
+                    controls();
+                    if (move == "WEST" || move == "W")
+                    {
+                        Console.Clear();
+                        Console.WriteLine("You ascend the stairwell. You instantly feel better.");
+                        Console.WriteLine("Press Enter to continue.");
+                        Console.ReadLine();
+                        SouthWing3WayRoom();
+                    }
+                    else if (move == "NORTH" || move == "N")
+                    {
+                        Console.Clear();
+                        Console.WriteLine("You could swear you saw something moving in the corner of your eye.\n" +
+                                          "The skittering of what you can only assume is rats silently echoes across the damp cellar.");
+                        Console.WriteLine("Press Enter to continue.");
+                        Console.ReadLine();
+                    }
+                    else if (move == "SOUTH" || move == "S")
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Through the open door to the south, you see a very brightly lit room, you decide to investigate.");
+                        Console.WriteLine("Press Enter to continue.");
+                        Console.ReadLine();
+                        HallOfTorches();
+                    }
+                    else if (move == "EAST" || move == "E")
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Pools of knee high water fills the east part of the cellar.\n" +
+                                          "Your nose catches a whiff of what can only be described as putrid corpses.");
+                        Console.WriteLine("Press Enter to continue.");
+                        Console.ReadLine();
+                    }
                 }
             }
         }
-        static void HallOfTorches() //TORCH PUZZLE, ITEM P-KEY
+        static void HallOfTorches() //TORCH PUZZLE, ITEM P-KEY, ADD TEXT
         {
             while (true)
             {
@@ -609,7 +660,7 @@ namespace textAdventure
                 }
             }
         }
-        static void Treasury() //ITEM O-KEY, ITEM OAK SHIELD
+        static void Treasury() //ITEM O-KEY, ITEM OAK SHIELD, ADD TEXT
         {
             while (true)
             {
@@ -652,14 +703,30 @@ namespace textAdventure
                 }
                 else if (move == "EAST" || move == "E")
                 {
+                    if (OakShield == 1)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Get shield.");
+                        Console.WriteLine("Press Enter to continue.");
+                        Console.ReadLine();
+                        OakShield--;
+                        player.backpack.backPack.Add(Item.OakShield);
+                    }
+                    else if (OakShield == 0)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("You take another careful look around, in case of other items scattered around.\n" +
+                                          "There is nothing else of value.");
+                        Console.WriteLine("Press Enter to continue.");
+                        Console.ReadLine();
+                    }
                     Console.Clear();
-                    Console.WriteLine("Pick up OAK SHIELD.");
                     Console.WriteLine("Press Enter to continue.");
                     Console.ReadLine();
                 }
             }
         }
-        static void EastStairwell() //NEED P-KEY
+        static void EastStairwell() //ADD TEXT
         {
             while (true)
             {
@@ -718,7 +785,7 @@ namespace textAdventure
                 }
             }
         }
-        static void EastWingLanding()
+        static void EastWingLanding() //ADD TEXT
         {
             while (true)
             {
@@ -759,7 +826,7 @@ namespace textAdventure
                 }
             }
         }
-        static void EastWingBalcony()
+        static void EastWingBalcony() //ADD TEXT
         {
             while (true)
             {
@@ -775,12 +842,25 @@ namespace textAdventure
                     Console.ReadLine();
                     EastWingLanding();
                 }
-                else if (move == "NORTH" || move == "N")
+                if (move == "NORTH" || move == "N")
                 {
-                    Console.Clear();
-                    Console.WriteLine("Nothing.");
-                    Console.WriteLine("Press Enter to continue.");
-                    Console.ReadLine();
+                    if (EWBhealthPotion == 1)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("You pocket it. (It's obviously a healing potion).");
+                        Console.WriteLine("Press Enter to continue.");
+                        Console.ReadLine();
+                        EWBhealthPotion--;
+                        player.backpack.backPack.Add(Item.HPpotion);
+                    }
+                    else if (EWBhealthPotion == 0)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("You take another careful look around, in case of other items scattered around.\n" +
+                                          "There is nothing else of value.");
+                        Console.WriteLine("Press Enter to continue.");
+                        Console.ReadLine();
+                    }
                 }
                 else if (move == "SOUTH" || move == "S")
                 {
@@ -798,47 +878,58 @@ namespace textAdventure
                 }
             }
         }
-        static void NorthStairwell() //ADD IN SKELETON COMBAT!
+        static void NorthStairwell() //ADD TEXT
         {
             while (true)
             {
-                Console.Clear();
-                Console.WriteLine("NorthStairwell, Skeleton.");
-                controls();
+                if (northstairwellskeleton)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Prepare for battle!");
+                    CombatSystem.Combat(player, new Enemy(EnemyType.Skeleton));
+                    northstairwellskeleton = false;
+                    controls();
+                }
+                else if (!northstairwellskeleton)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Room description.");
+                    controls();
 
-                if (move == "WEST" || move == "W")
-                {
-                    Console.Clear();
-                    Console.WriteLine("Go to NorthWingLanding.");
-                    Console.WriteLine("Press Enter to continue.");
-                    Console.ReadLine();
-                    NorthWingLanding();
-                }
-                else if (move == "NORTH" || move == "N")
-                {
-                    Console.Clear();
-                    Console.WriteLine("Nothing.");
-                    Console.WriteLine("Press Enter to continue.");
-                    Console.ReadLine();
-                }
-                else if (move == "SOUTH" || move == "S")
-                {
-                    Console.Clear();
-                    Console.WriteLine("Go to EastWingLanding.");
-                    Console.WriteLine("Press Enter to continue.");
-                    Console.ReadLine();
-                    EastWingLanding();
-                }
-                else if (move == "EAST" || move == "E")
-                {
-                    Console.Clear();
-                    Console.WriteLine("Nothing.");
-                    Console.WriteLine("Press Enter to continue.");
-                    Console.ReadLine();
+                    if (move == "WEST" || move == "W")
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Go to NorthWingLanding.");
+                        Console.WriteLine("Press Enter to continue.");
+                        Console.ReadLine();
+                        NorthWingLanding();
+                    }
+                    else if (move == "NORTH" || move == "N")
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Nothing.");
+                        Console.WriteLine("Press Enter to continue.");
+                        Console.ReadLine();
+                    }
+                    else if (move == "SOUTH" || move == "S")
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Go to EastWingLanding.");
+                        Console.WriteLine("Press Enter to continue.");
+                        Console.ReadLine();
+                        EastWingLanding();
+                    }
+                    else if (move == "EAST" || move == "E")
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Nothing.");
+                        Console.WriteLine("Press Enter to continue.");
+                        Console.ReadLine();
+                    }
                 }
             }
         }
-        static void NorthWingLanding()
+        static void NorthWingLanding() //ADD TEXT
         {
             while (true)
             {
@@ -878,7 +969,7 @@ namespace textAdventure
                 }
             }
         }
-        static void ExtravagantRoom() //NEED O-KEY
+        static void ExtravagantRoom() //ADD TEXT
         {
             while (true)
             {
@@ -938,7 +1029,7 @@ namespace textAdventure
                 }
             }
         }
-        static void NorthBrokenBridge()
+        static void NorthBrokenBridge() //ADD TEXT
         {
             while (true)
             {
@@ -977,7 +1068,7 @@ namespace textAdventure
                 }
             }
         }
-        static void ThroneRoom() //ADD IN BOSSFIGHT!
+        static void ThroneRoom() //ADD IN BOSSFIGHT, ADD TEXT
         {
             while (true)
             {

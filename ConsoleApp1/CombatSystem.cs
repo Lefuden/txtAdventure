@@ -61,13 +61,49 @@ namespace BattleSystem
             string fightMove;
             while (player.HP > 0 && enemy.HP > 0)
             {
-                Console.WriteLine($"\n\nCommands:> FIGHT[F] BACKPACK[B]\nPlayer:> {player.name}\nPlayer HP:> {player.HP} \nEnemy:> {enemy.enemyType.ToString()}\nEnemy HP:> {enemy.HP}");
+                Console.WriteLine($"\n\n{player.name} stats:" +
+                                  $" HP: {player.HP} | ATK: {player.Atk} | DEF: {player.Def}\n\n" +
+                                  $"{enemy.enemyType.ToString()} stats:" +
+                                  $" HP: {enemy.HP} | ATK: {enemy.Atk} | DEF: {enemy.Def}\n\n" +
+                                  $"Commands:> FIGHT[F] BACKPACK[B] [EXIT]\n");
                 Console.Write("Input:> ");
                 fightMove = Console.ReadLine().ToUpper();
-                while (!(fightMove == "FIGHT" || fightMove == "F" || fightMove == "BACKPACK" || fightMove == "B"))
+                if (fightMove == "BACKPACK" || fightMove == "B")
+                {
+                    player.backpack.ShowBackpack();
+                }
+                if (fightMove == "EXIT")
                 {
                     Console.Clear();
-                    Console.WriteLine($"\n\nCommands:> FIGHT[F] BACKPACK[B]\nPlayer:> {player.name}\nPlayer HP:> {player.HP} \nEnemy:> {enemy.enemyType.ToString()}\nEnemy HP:> {enemy.HP}");
+                    Console.WriteLine($"Are you sure you want to stop playing, {player.name}? There is no save function. Sorry.");
+                    Console.Write("[Y]ES/[N]O:> ");
+                    string decide = Console.ReadLine().ToUpper();
+                    if (decide == "YES" || decide == "Y")
+                    {
+                        Console.Clear();
+                        Console.WriteLine($"Thank you for playing, {player.name}!");
+                        Console.WriteLine("Press Enter to exit.");
+                        Console.ReadLine();
+                        Environment.Exit(-1);
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine($"{player.name} shakes off a moment of weakness and decides to return to the adventure at hand.");
+                        Console.WriteLine("Press Enter to continue.");
+                        Console.ReadLine();
+                    }
+                }
+                Console.Clear();
+                while (!(fightMove == "FIGHT" || fightMove == "F" || fightMove == "BACKPACK" || fightMove == "B" || fightMove == "EXIT"))
+                {
+                    Console.Clear();
+                    Console.WriteLine("Invalid input!");
+                    Console.WriteLine($"\n\n{player.name} stats:" +
+                                      $" HP: {player.HP} | ATK: {player.Atk} | DEF: {player.Def}\n\n" +
+                                      $"{enemy.enemyType.ToString()} stats:" +
+                                      $" HP: {enemy.HP} | ATK: {enemy.Atk} | DEF: {enemy.Def}\n\n" +
+                                      $"Commands:> FIGHT[F] BACKPACK[B] [EXIT]\n");
                     Console.Write("Input:> ");
                     fightMove = Console.ReadLine().ToUpper();
                 }
@@ -77,14 +113,46 @@ namespace BattleSystem
                 }
                 else if (fightMove == "BACKPACK" || fightMove == "B")
                 {
-                    
+                    player.backpack.ShowBackpack();
                 }
-                if (enemy.HP <= 0) break;
+                if (fightMove == "EXIT")
+                {
+                    Console.Clear();
+                    Console.WriteLine($"Are you sure you want to stop playing, {player.name}? There is no save function. Sorry.");
+                    Console.Write("[Y]ES/[N]O:> ");
+                    string decide = Console.ReadLine().ToUpper();
+                    if (decide == "YES" || decide == "Y")
+                    {
+                        Console.Clear();
+                        Console.WriteLine($"Thank you for playing!");
+                        Console.WriteLine("Press Enter to exit.");
+                        Console.ReadLine();
+                        Environment.Exit(-1);
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Lets resume this adventure.");
+                        Console.WriteLine("Press Enter to continue.");
+                        Console.ReadLine();
+                    }
+                }
+                if (enemy.HP <= 0)
+                {
+                    Console.Clear();
+                    Console.WriteLine($"As {player.name} lands a final blow, the {enemy.enemyType.ToString()} falls apart.\n\n" +
+                                      $"You stand victorious!\n");
+                    Console.WriteLine("Press Enter to continue.");
+                    Console.ReadLine();
+                    break;
+                }
                 EnemyAccuracy(player, enemy);
                 if (player.HP <=0)
                 {
                     Console.Clear();
-                    Console.WriteLine("GAME OVER!");
+                    Console.WriteLine($"The {enemy.enemyType.ToString()} emanates an ominous aura as it suddenly moves faster.\n" +
+                                      $"You couldn't see what hit you as your vision fades to black. This is how your adventure ends.\n\n" +
+                                      $"GAME OVER!\n");
                     Console.WriteLine("Press Enter to exit.");
                     Console.ReadLine();
                     Environment.Exit(-1);
@@ -97,11 +165,12 @@ namespace BattleSystem
             int playerAccuracy = Convert.ToInt32(rand.Next(1, 100));
             int DamageToEnemy;
             int DamageToPlayer;
+            Console.Write($"{player.name}:> ");
 
                 if (playerAccuracy == 1)
                 {
                     Console.WriteLine($"You somehow manage to throw yourself off balance and smash your face into the wall!\n" +
-                                      $"you take {DamageToPlayer = player.Atk + 2} damage.");
+                                      $"you take {DamageToPlayer = player.Atk + 3} damage.");
                     player.HP = player.HP - DamageToPlayer;
                 }
                 else if (playerAccuracy > 1 && playerAccuracy <= 20)
@@ -125,7 +194,7 @@ namespace BattleSystem
                 else
                 {
                     Console.WriteLine($"Your aim is true and you hit a weakpoint on the {enemy.enemyType.ToString()}! " +
-                                      $"You deal {DamageToEnemy = player.Atk * 2 + 2 - enemy.Def} critical damage!");
+                                      $"You deal {DamageToEnemy = player.Atk * 2 + 3 - enemy.Def} critical damage!");
                     enemy.HP = enemy.HP - DamageToEnemy;
                 }
         }
@@ -135,26 +204,27 @@ namespace BattleSystem
             int enemyAccuracy = Convert.ToInt32(rand.Next(1, 100));
             int DamageToEnemy;
             int DamageToPlayer;
-                if (enemyAccuracy == 1)
+            Console.Write($"{enemy.enemyType.ToString()}:> ");
+            if (enemyAccuracy == 1)
                 {
                     Console.WriteLine($"The {enemy.enemyType.ToString()} overshoots its swing, throws itself off balance and smashes its skull into the wall!\n" +
-                                      $"The {enemy.enemyType.ToString()} takes {DamageToEnemy = enemy.Atk + 2} damage.");
+                                      $"The {enemy.enemyType.ToString()} takes {DamageToEnemy = enemy.Atk + 3} damage.");
                     enemy.HP = enemy.HP - DamageToEnemy;
                 }
                 else if (enemyAccuracy > 1 && enemyAccuracy <= 30)
                 {
                     Console.WriteLine($"The {enemy.enemyType.ToString()} misses!");
                 }
-                else if (enemyAccuracy > 30 && enemyAccuracy <= 60)
+                else if (enemyAccuracy > 30 && enemyAccuracy <= 50)
                 {
                     Console.WriteLine($"You raise your guard and deftly block the attack with your shield! You take {DamageToPlayer = enemy.Atk - player.Def - 2} damage.");
                     player.HP = player.HP - DamageToPlayer;
                 }
-                else if (enemyAccuracy > 60 && enemyAccuracy <= 70)
+                else if (enemyAccuracy > 50 && enemyAccuracy <= 60)
                 {
                     Console.WriteLine("You quickly react to the incoming swing and dodge the attack!");
                 }
-                else if (enemyAccuracy > 70 && enemyAccuracy <= 99)
+                else if (enemyAccuracy > 60 && enemyAccuracy <= 99)
                 {
                     Console.WriteLine($"The {enemy.enemyType.ToString()} deals {DamageToPlayer = enemy.Atk - player.Def} damage.");
                     player.HP = player.HP - DamageToPlayer;
@@ -162,7 +232,7 @@ namespace BattleSystem
                 else
                 {
                     Console.WriteLine($"The fearsome mass of bones suddenly move with incredible speed and steps past your guard.\n" +
-                                      $"The blow hits a weak point! You take {DamageToPlayer = enemy.Atk * 2 + 2 - player.Def} critical damage!");
+                                      $"The blow hits a weak point! You take {DamageToPlayer = enemy.Atk * 2 + 3 - player.Def} critical damage!");
                     player.HP = player.HP - DamageToPlayer;
                 }
         }
@@ -209,7 +279,7 @@ namespace BattleSystem
     }
 }
 
-///* ACCURACY: 1-100, =1 fumble || >2 && <=25 miss || >25 && <=50 block || >50 && <=65 dodge || >65  && <=99 hit || =100 crit
+//* ACCURACY: 1-100, =1 fumble || >2 && <=25 miss || >25 && <=50 block || >50 && <=65 dodge || >65  && <=99 hit || =100 crit
 
 //if Attack
 //hit     = (>65  && <=99)       X enemy/player damage minus X enemy/player defense
